@@ -1323,17 +1323,6 @@
      "verified": true
     },
     {
-     "ref": "Bava Batra 59b:5",
-     "heRef": "בבא בתרא נט:",
-     "url": "https://www.sefaria.org/Bava_Batra_59b%3A5?lang=he",
-     "marker": "מתלא",
-     "n": 1,
-     "excerpt": "למתלא ביה מידי מהדרנא אפאי ותלינא ביה",
-     "text": "לא דכולי עלמא שמיה היזק ושאני הכא דאמר ליה לתשמישתא לא חזי למאי חזי למתלא ביה מידי מהדרנא אפאי ותלינא ביה",
-     "edition": "primary",
-     "verified": true
-    },
-    {
      "ref": "Bava Batra 73a:7",
      "heRef": "בבא בתרא עג.",
      "url": "https://www.sefaria.org/Bava_Batra_73a%3A7?lang=he",
@@ -1404,17 +1393,6 @@
      "n": 1,
      "excerpt": "כדאמרי אינשי מאן דאית ליה דינא ליקרב לגבי דיינא",
      "text": "ורבי יונתן לישנא דעלמא נקט כדאמרי אינשי מאן דאית ליה דינא ליקרב לגבי דיינא",
-     "edition": "primary",
-     "verified": true
-    },
-    {
-     "ref": "Sanhedrin 38b:22",
-     "heRef": "סנהדרין לח:",
-     "url": "https://www.sefaria.org/Sanhedrin_38b%3A22?lang=he",
-     "marker": "מתלא",
-     "n": 1,
-     "excerpt": "מתלי ואמר רבי יוחנן שלש מאות משלות שועלים היו לו לרבי מאיר ואנו אין לנו אלא שלש",
-     "text": "דאמר רבי יוחנן כי הוה דריש רבי מאיר בפירקיה הוה דריש תילתא שמעתא תילתא אגדתא תילתא מתלי ואמר רבי יוחנן שלש מאות משלות שועלים היו לו לרבי מאיר ואנו אין לנו אלא שלש",
      "edition": "primary",
      "verified": true
     },
@@ -1782,17 +1760,6 @@
    "group": "סדר קדשים",
    "items": [
     {
-     "ref": "Chullin 10b:4",
-     "heRef": "חולין י:",
-     "url": "https://www.sefaria.org/Chullin_10b%3A4?lang=he",
-     "marker": "מתלא",
-     "n": 1,
-     "excerpt": "מתלא תלינן ממאי דבעצם דמפרקת דקמייתא איפגים דלמא בעצם דמפרקת דבתרייתא איפגים",
-     "text": "ואיבעית אימא לעולם כרב הונא דאי כרב חסדא מכדי מתלא תלינן ממאי דבעצם דמפרקת דקמייתא איפגים דלמא בעצם דמפרקת דבתרייתא איפגים",
-     "edition": "primary",
-     "verified": true
-    },
-    {
      "ref": "Chullin 58b:3",
      "heRef": "חולין נח:",
      "url": "https://www.sefaria.org/Chullin_58b%3A3?lang=he",
@@ -1921,17 +1888,6 @@
    "corpus": "bavli",
    "group": "סדר טהרות",
    "items": [
-    {
-     "ref": "Niddah 4a:13",
-     "heRef": "נדה ד.",
-     "url": "https://www.sefaria.org/Niddah_4a%3A13?lang=he",
-     "marker": "מתלא",
-     "n": 1,
-     "excerpt": "מתלא תלינן",
-     "text": "וכי תימא כשעת מציאתן בין לקולא בין לחומרא ובמקום מציאתן אבל שלא במקום מציאתן משרף לא שרפינן מתלא תלינן",
-     "edition": "primary",
-     "verified": true
-    },
     {
      "ref": "Niddah 31a:10",
      "heRef": "נדה לא.",
