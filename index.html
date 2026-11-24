@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="yi" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>אמרי אינשי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Noto+Rashi+Hebrew:wght@400;500&family=Rubik:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <h1>אמרי אינשי</h1>
+    <p id="tagline"></p>
+  </div>
+  <div class="controls">
+    <div class="langs" role="group" aria-label="Language">
+      <button data-lang="yi">אידיש</button><button data-lang="en">English</button>
+    </div>
+    <div class="tabs" role="tablist">
+      <button role="tab" data-corpus="bavli" aria-selected="true"></button>
+      <button role="tab" data-corpus="midrash" aria-selected="false"></button>
+    </div>
+    <input id="q" type="search">
+  </div>
+</header>
+
+<div class="layout">
+  <nav id="shelf" aria-label="ספרים"></nav>
+  <select id="shelfSelect" aria-label="מסכתא"></select>
+  <main>
+    <div class="bookhead">
+      <h2 id="bookTitle"></h2>
+      <span id="bookCount"></span>
+    </div>
+    <ol id="list"></ol>
+    <p id="empty" hidden></p>
+  </main>
+</div>
+
+<footer><span id="credit"></span> <a href="https://www.sefaria.org" target="_blank" rel="noopener">Sefaria</a>. <span id="updated"></span></footer>
+<script src="app.js"></script>
+</body>
+</html>

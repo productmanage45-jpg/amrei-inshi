@@ -1,0 +1,76 @@
+:root{
+  --paper:#F5F7FA; --ink:#17202B; --muted:#5A6573; --tcheles:#1E4E8C;
+  --gold:#A8741A; --line:#D9DFE7; --mark:#F3E3BF; --panel:#FFFFFF;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --paper:#0E151F; --ink:#E5EBF2; --muted:#9AA6B4; --tcheles:#86B4F0;
+    --gold:#E0B25A; --line:#243143; --mark:#4A3A16; --panel:#131C28;
+    color-scheme: dark;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font-family:"Rubik","Arial Hebrew",Arial,sans-serif;line-height:1.5}
+a{color:var(--tcheles)}
+:focus-visible{outline:2px solid var(--tcheles);outline-offset:2px}
+
+.top{padding:2.5rem clamp(1rem,4vw,3rem) 1.25rem;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:1.5rem;align-items:end;justify-content:space-between}
+.brand h1{font-family:"Frank Ruhl Libre",serif;font-weight:900;font-size:clamp(2.6rem,7vw,4.5rem);line-height:1;margin:0;color:var(--tcheles)}
+.brand p{margin:.6rem 0 0;color:var(--muted);max-width:46ch}
+.controls{display:flex;flex-direction:column;gap:.6rem;min-width:min(100%,320px)}
+.tabs{display:flex;gap:.25rem;border-bottom:1px solid var(--line)}
+.tabs button{font:inherit;font-weight:500;background:none;border:0;padding:.4rem .9rem;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-1px}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--gold)}
+#q{font:inherit;padding:.55rem .8rem;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)}
+
+.layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:clamp(1rem,3vw,3rem);padding:1.5rem clamp(1rem,4vw,3rem) 3rem;max-width:1200px}
+#shelf{position:sticky;top:1rem;align-self:start;max-height:calc(100vh - 2rem);overflow:auto;padding-left:.5rem}
+#shelf h3{font-size:.85rem;font-weight:500;color:var(--gold);margin:1.1rem 0 .3rem}
+#shelf h3:first-child{margin-top:0}
+#shelf button{display:flex;justify-content:space-between;width:100%;font:inherit;font-family:"Frank Ruhl Libre",serif;font-size:1.05rem;background:none;border:0;border-right:2px solid transparent;padding:.15rem .6rem;color:var(--ink);cursor:pointer;text-align:right}
+#shelf button:hover{border-right-color:var(--line)}
+#shelf button[aria-current="true"]{border-right-color:var(--tcheles);color:var(--tcheles);font-weight:700}
+#shelf button .n{font-family:"Rubik",sans-serif;font-size:.8rem;color:var(--muted)}
+#shelf button.zero{color:var(--muted)}
+#shelfSelect{display:none}
+
+.bookhead{display:flex;align-items:baseline;gap:1rem;border-bottom:2px solid var(--ink);padding-bottom:.4rem;margin-bottom:.5rem}
+.bookhead h2{font-family:"Frank Ruhl Libre",serif;font-size:2rem;margin:0}
+#bookCount{color:var(--muted)}
+
+#list{list-style:none;margin:0;padding:0}
+#list li{padding:1.1rem 0;border-bottom:1px solid var(--line);max-width:70ch}
+.saying{font-family:"Frank Ruhl Libre",serif;font-size:1.45rem;line-height:1.55;margin:0}
+mark{background:var(--mark);color:inherit;padding:0 .15em;border-radius:3px}
+.meta{display:flex;flex-wrap:wrap;gap:.25rem 1rem;align-items:center;margin-top:.4rem;font-size:.92rem}
+.meta .src{font-weight:500;text-underline-offset:3px}
+.meta .book{color:var(--muted)}
+.meta button{font:inherit;background:none;border:0;color:var(--muted);cursor:pointer;padding:0;text-decoration:underline dotted;text-underline-offset:3px}
+.full{margin:.7rem 0 0;padding-right:.9rem;border-right:2px solid var(--gold)}
+.full .rashi{font-family:"Noto Rashi Hebrew","Frank Ruhl Libre",serif;font-size:1.05rem;line-height:1.8;margin:0}
+.full .en{direction:ltr;text-align:left;color:var(--muted);font-size:.95rem;margin:.6rem 0 0;font-family:Georgia,serif}
+#empty{color:var(--muted);font-size:1.1rem;padding:2rem 0}
+footer{padding:1.5rem clamp(1rem,4vw,3rem);border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+
+@media (max-width:760px){
+  .layout{grid-template-columns:1fr}
+  #shelf{display:none}
+  #shelfSelect{display:block;font:inherit;padding:.55rem;border:1px solid var(--line);border-radius:6px;background:var(--panel);color:var(--ink)}
+  .saying{font-size:1.25rem}
+}
+
+.langs{display:flex;gap:.4rem;justify-content:flex-end}
+html[dir="ltr"] .langs{justify-content:flex-start}
+.langs button{font:inherit;font-size:.85rem;background:none;border:1px solid var(--line);border-radius:999px;padding:.15rem .75rem;color:var(--muted);cursor:pointer}
+.langs button[aria-pressed="true"]{border-color:var(--tcheles);color:var(--tcheles);font-weight:500}
+html[dir="ltr"] #shelf button{text-align:left;border-right:0;border-left:2px solid transparent}
+html[dir="ltr"] #shelf button:hover{border-left-color:var(--line)}
+html[dir="ltr"] #shelf button[aria-current="true"]{border-left-color:var(--tcheles)}
+html[dir="ltr"] #shelf{padding-left:0;padding-right:.5rem}
+html[dir="ltr"] #shelf button span:first-child{font-family:"Rubik",sans-serif;font-size:.98rem}
+html[dir="ltr"] .bookhead h2{font-family:"Rubik",sans-serif;font-weight:500}
+.saying,.full .rashi{direction:rtl;text-align:right}
+html[dir="ltr"] .full{padding-right:0;border-right:0;padding-left:.9rem;border-left:2px solid var(--gold)}
+.trans{direction:ltr;text-align:left;color:var(--muted);font-family:Georgia,serif;font-size:1rem;margin:.35rem 0 0}
