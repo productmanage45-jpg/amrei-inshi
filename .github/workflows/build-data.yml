@@ -1,0 +1,24 @@
+name: Build sayings data
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 1 * *"   # monthly refresh
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 scripts/build_data.py
+      - name: Commit data
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add data/sayings.json
+          git diff --cached --quiet || git commit -m "Update sayings data"
+          git push
