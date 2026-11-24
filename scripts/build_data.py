@@ -44,18 +44,20 @@ BAVLI = [
 
 # Phrases that introduce a popular saying. B = start of a word, allowing the
 # one-letter prefixes ד/ו/כ/ה/ל/ש/ב/מ in front.
-B = r"(?<![א-ת])[דוכהלשבמ]{0,3}"
+B = r"(?<![א-ת])(?:אד|[דוכהלשבמ]{0,3})"
 E = r"(?![א-ת])"
 MARKERS = [
-    ("אמרי אינשי", rf"{B}(?:אמרי|אמרין)\s+(?:אינשי|אינשין|אנשי|אינישי){E}|{B}אמרו\s+(?:אינשי|אינשין){E}|{B}אינשי\s+אמרי{E}"),
+    ("אמרי אינשי", rf"{B}(?:אמרי|אמרין)\s+(?:אינשי|אינשין|אנשי|אינישי){E}|{B}אמרו\s+(?:אינשי|אינשין){E}|{B}אינשי\s+אמרי{E}(?!\s+(?:ליה|להו|לה|לי)(?![א-ת]))"),
     ("מתלא", rf"{B}(?:מתלא|מתלי|מתליה){E}"),
-    ("משל הדיוט", rf"{B}משל\s+(?:ה)?הדיוט{E}|{B}הדיוט\s+(?:אומר|אמר){E}"),
+    ("משל הדיוט", rf"{B}משל\s+(?:ה)?הדיוט{E}"),
     ("בני נשא", rf"{B}(?:אמרי|אמרין)\s+בני\s+נשא{E}|{B}בני\s+נשא\s+אמרי{E}"),
     ("הבריות אומרות", rf"{B}(?:אומרים|אומרות|אמרו|אמרי)\s+(?:ה)?בריות{E}|{B}הבריות\s+(?:אומרים|אומרות){E}"),
 ]
 MARKER_RE = re.compile("|".join(f"(?P<m{i}>{p})" for i, (_, p) in enumerate(MARKERS)))
 # Words that often sit near a saying. Lines with these that no marker caught go to review.
-NEAR_RE = re.compile(r"אינשי|אינשין|אינישי|מתל[אי]|הדיוט|בריות|בני\s+נשא|פתגמ|כדאמרי|דאמרי\s+אינשי")
+NEAR_RE = re.compile(r"\S*אמר\S*\s+(?:\S+\s+)?\S*אינש\S*|\S*אינש\S*\s+(?:\S+\s+)?\S*אמר\S*|(?<![א-ת])[דוכ]?מתל[אי](?![א-ת])|פתגמ|משל\S*\s+(?:\S+\s+){0,2}\S*הדיוט|בני\s+נשא|(?:אומרים|אומרות)\s+(?:בני\s+אדם|הבריות)|בני\s+אדם\s+אומרים|כמו\s+שאומרים")
+# Checked by hand: the marker words appear but no saying is quoted.
+EXCLUDE = {"Yoma 78b:5"}
 
 NIKUD = re.compile(r"[֑-ֽֿ-ׇ]")
 FOOTNOTE = re.compile(r'<sup[^>]*class="footnote-marker"[^>]*>.*?</sup>|<i[^>]*class="footnote"[^>]*>.*?</i>', re.S)
@@ -151,10 +153,12 @@ def scan_book(title, he, group, primary, second):
         p_count = {}
         # Pass 1: every match in every line of the primary edition
         for j, t in enumerate(p_amud, 1):
-            hits = find(t)
             ref = f"{title} {amud(i)}:{j}"
+            hits = find(t)
             for n, (name, m) in enumerate(hits, 1):
                 p_count[name] = p_count.get(name, 0) + 1
+                if ref in EXCLUDE:
+                    continue  # counted, so the Vilna pass doesn't re-add it
                 items.append({
                     "ref": ref, "heRef": he_ref(he, i, j), "url": url_for(ref),
                     "marker": name, "n": n, "excerpt": excerpt(t, m), "text": t,
@@ -165,8 +169,8 @@ def scan_book(title, he, group, primary, second):
         # Pass 2: the second edition, amud by amud
         s_count = {}
         for j, t in enumerate(s_amud, 1):
-            hits = find(t)
             ref = f"{title} {amud(i)}:{j}"
+            hits = find(t)
             for name, m in hits:
                 s_count[name] = s_count.get(name, 0) + 1
                 if s_count[name] > p_count.get(name, 0):
@@ -176,9 +180,6 @@ def scan_book(title, he, group, primary, second):
                         "marker": name, "n": 1, "excerpt": excerpt(t, m), "text": t,
                         "edition": "second", "flag": "only-in-vilna",
                     })
-            if not hits and NEAR_RE.search(t):
-                # skip if primary already flagged the same idea on this amud
-                review.append({"ref": f"{title} {amud(i)}", "url": url_for(f"{title} {amud(i)}"), "edition": SECOND, "text": t})
         for name, c in p_count.items():
             if c > s_count.get(name, 0) and second and i < len(second) and second[i]:
                 for it in items:
@@ -191,9 +192,9 @@ def scan_book(title, he, group, primary, second):
 def verify(item):
     """Pass 3: fetch the source on its own and make sure the saying is there."""
     try:
-        d = get(V1 + urllib.parse.quote(item["ref"]) + "?context=0&commentary=0&pad=0")
-        he = d.get("he")
-        texts = list(_flat(he))
+        ed = PRIMARY if item.get("edition") == "primary" else SECOND
+        d = get(V3 + urllib.parse.quote(item["ref"].replace(" ", "_")) + "?version=" + urllib.parse.quote("hebrew|" + ed))
+        texts = [x for v in d.get("versions", []) for x in _flat(v.get("text"))]
         joined = " ".join(clean(PARENS.sub("", x)) for x in texts)
         return bool(MARKER_RE.search(joined))
     except Exception:
