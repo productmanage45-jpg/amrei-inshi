@@ -19,6 +19,6 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@users.noreply.github.com"
-          git add data/sayings.json
+          git add data/sayings.json data/review.json
           git diff --cached --quiet || git commit -m "Update sayings data"
           git push
