@@ -57,7 +57,13 @@ MARKER_RE = re.compile("|".join(f"(?P<m{i}>{p})" for i, (_, p) in enumerate(MARK
 # Words that often sit near a saying. Lines with these that no marker caught go to review.
 NEAR_RE = re.compile(r"\S*אמר\S*\s+(?:\S+\s+)?\S*אינש\S*|\S*אינש\S*\s+(?:\S+\s+)?\S*אמר\S*|(?<![א-ת])[דוכ]?מתל[אי](?![א-ת])|פתגמ|משל\S*\s+(?:\S+\s+){0,2}\S*הדיוט|בני\s+נשא|(?:אומרים|אומרות)\s+(?:בני\s+אדם|הבריות)|בני\s+אדם\s+אומרים|כמו\s+שאומרים")
 # Checked by hand: the marker words appear but no saying is quoted.
-EXCLUDE = {"Yoma 78b:5"}
+EXCLUDE = {
+    "Yoma 78b:5",         # אמרי אינשי עבדו ליה = "people will say they did it", not a saying
+    "Bava Batra 59b:5",   # למתלא ביה = to hang something
+    "Chullin 10b:4",      # במאי מתלא תלינן = what do we attribute it to
+    "Niddah 4a:13",       # same
+    "Sanhedrin 38b:22",   # תילתא מתלי = a third parables (R' Meir's teaching)
+}
 
 NIKUD = re.compile(r"[֑-ֽֿ-ׇ]")
 FOOTNOTE = re.compile(r'<sup[^>]*class="footnote-marker"[^>]*>.*?</sup>|<i[^>]*class="footnote"[^>]*>.*?</i>', re.S)
