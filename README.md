@@ -1,7 +1,7 @@
 # אמרי אינשי
 
 Every place in Talmud Bavli (by masechta) where a popular saying is quoted
-("אמרי אינשי", "היינו דאמרי אינשי", "מתלא", "משל הדיוט" …), each with a clickable Sefaria source.
+("אמרי אינשי", "היינו דאמרי אינשי", "מתלא", "משל הדיוט" …), each with a clickable Sefaria source and an English translation (William Davidson Edition, via Sefaria).
 
 ## How the list is checked
 1. **Full scan** of Shas (Sefaria, William Davidson Aramaic). Every match in a line is kept, not just the first.

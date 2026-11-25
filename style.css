@@ -72,3 +72,4 @@ html[dir="ltr"] .bookhead h2{font-family:"Rubik",sans-serif;font-weight:500}
 .saying,.full .rashi{direction:rtl;text-align:right}
 html[dir="ltr"] .full{padding-right:0;border-right:0;padding-left:.9rem;border-left:2px solid var(--gold)}
 .trans{direction:ltr;text-align:left;color:var(--muted);font-family:Georgia,serif;font-size:1rem;margin:.35rem 0 0}
+.ensay{direction:ltr;text-align:left;font-family:Georgia,"Frank Ruhl Libre",serif;font-style:italic;color:var(--ink);opacity:.85;margin:.3rem 0 0;font-size:1rem;line-height:1.5}

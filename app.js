@@ -5,12 +5,12 @@
       search: "זוך אַ ווערטל…", all: "גאַנץ ש״ס", allBavli: "גאַנץ ש״ס", flag: "נאָר אין ווילנער ש״ס",
       searching: "זוכן: ", count: n => `${n} ווערטלעך`, show: "ווייז די גאַנצע שורה", hide: "באַהאַלט",
       none: "קיין ווערטל טרעפט נישט — פרובירט אַן אַנדער וואָרט.", building: "די זאַמלונג ווערט נאָך צוגעגרייט.",
-      failed: "די דאַטן האָבן נישט געלאָדן.", credit: "טעקסט פון", updated: d => `דערהיינטיקט ${d}.` },
+      failed: "די דאַטן האָבן נישט געלאָדן.", credit: "טעקסט און ענגלישע איבערזעצונג (William Davidson Edition) פון", updated: d => `דערהיינטיקט ${d}.` },
     en: { dir: "ltr", tagline: "Every time the Gemara quotes a saying “that people say” — by masechta, with a link to the source.",
       search: "Search a saying…", all: "All of Shas", allBavli: "All of Shas", flag: "Only in the Vilna edition",
       searching: "Search: ", count: n => `${n} ${n === 1 ? "saying" : "sayings"}`, show: "Show full passage", hide: "Hide",
       none: "No sayings match — try another word.", building: "The collection is still being built.",
-      failed: "The data didn’t load.", credit: "Text from", updated: d => `Updated ${d}.` },
+      failed: "The data didn’t load.", credit: "Text and English translation (William Davidson Edition) from", updated: d => `Updated ${d}.` },
   };
   const GROUP_EN = { "סדר זרעים": "Seder Zeraim", "סדר מועד": "Seder Moed", "סדר נשים": "Seder Nashim", "סדר נזיקין": "Seder Nezikin",
     "סדר קדשים": "Seder Kodashim", "סדר טהרות": "Seder Taharos" };
@@ -25,6 +25,22 @@
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const strip = s => s.replace(/[\u0591-\u05C7]/g, "");
   const highlight = s => esc(s).replace(MARK, m => `<mark>${m}</mark>`);
+  // Pull the saying itself out of the English passage ("as people say: ...").
+  const T1 = /\b(?:people|they|creations|everyone|others)\b[^.:;]{0,50}?\bsay(?:[^.:;?]{0,35}[:?]| that\b)/gi;
+  const T2 = /\b(?:saying|adage|proverb|maxim|parable)\b[^.:;]{0,30}?:/gi;
+  function enSaying(en, n) {
+    if (!en) return "";
+    const a = [...en.matchAll(T1)], b = [...en.matchAll(T2)];
+    for (const m of [a[(n || 1) - 1], ...a, ...b].filter(Boolean)) {
+      let s = en.slice(m.index + m[0].length).replace(/^[\s:?]+/, "").replace(/^[^A-Za-z“"‘]*?(?=[A-Z“"‘])/, "").trim();
+      if (!s) continue;
+      s = s.split(/,? as it is (?:stated|written|said)\b/)[0];
+      const e = s.search(/[.?!][”"’']?(?:\s+[A-Z(]|$)/);
+      const r = e >= 0 ? s.slice(0, e + 1) : s;
+      return r.length > 320 ? r.slice(0, 317).replace(/\s\S*$/, "") + "…" : r;
+    }
+    return "";
+  }
   const books = () => DATA.books.filter(b => b.corpus === "bavli");
   const bookName = b => en() ? b.id : b.he;
   const groupName = g => en() ? (GROUP_EN[g] || g) : g;
@@ -84,6 +100,7 @@
     list.innerHTML = rows.map(([b, it], i) => `
       <li>
         <p class="saying" lang="he">${highlight(it.excerpt)}</p>
+        ${(it.enS = enSaying(it.en, it.n)) ? `<p class="ensay" lang="en">“${esc(it.enS.replace(/^[“"]|[”"]$/g, ""))}”</p>` : ""}
         <div class="meta">
           <a class="src" href="${esc(it.url.replace("?lang=he", en() ? "?lang=bi" : "?lang=he"))}" target="_blank" rel="noopener">${esc(srcName(it))}</a>
           ${state.book && !q ? "" : `<span class="book">${esc(bookName(b))}</span>`}
