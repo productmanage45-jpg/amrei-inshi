@@ -24,6 +24,7 @@ OUT = ROOT / "data" / "sayings.json"
 REVIEW = ROOT / "data" / "review.json"
 PRIMARY = "William Davidson Edition - Aramaic"
 SECOND = "Wikisource Talmud Bavli"
+ENGLISH = "William Davidson Edition - English"
 
 BAVLI = [
     ("סדר זרעים", [("Berakhot", "ברכות")]),
@@ -90,10 +91,10 @@ def get(url):
 
 
 def get_book(title):
-    q = "?version=" + urllib.parse.quote("hebrew|" + PRIMARY) + "&version=" + urllib.parse.quote("hebrew|" + SECOND)
+    q = "?version=" + urllib.parse.quote("hebrew|" + PRIMARY) + "&version=" + urllib.parse.quote("hebrew|" + SECOND) + "&version=" + urllib.parse.quote("english|" + ENGLISH)
     d = get(V3 + urllib.parse.quote(title.replace(" ", "_")) + q)
     vers = {v["versionTitle"]: v.get("text") or [] for v in d.get("versions", [])}
-    return vers.get(PRIMARY, []), vers.get(SECOND, [])
+    return vers.get(PRIMARY, []), vers.get(SECOND, []), vers.get(ENGLISH, [])
 
 
 def amud(i):
@@ -151,12 +152,13 @@ def heb_num(n):
     return s
 
 
-def scan_book(title, he, group, primary, second):
+def scan_book(title, he, group, primary, second, english=()):
     items, review = [], []
     for i in range(max(len(primary), len(second))):
         p_amud = [clean(x) for x in (primary[i] if i < len(primary) else []) if isinstance(x, str)]
         s_amud = [clean(PARENS.sub("", x)) for x in (second[i] if i < len(second) else []) if isinstance(x, str)]
         p_count = {}
+        e_amud = english[i] if i < len(english) and isinstance(english[i], list) else []
         # Pass 1: every match in every line of the primary edition
         for j, t in enumerate(p_amud, 1):
             ref = f"{title} {amud(i)}:{j}"
@@ -169,6 +171,7 @@ def scan_book(title, he, group, primary, second):
                     "ref": ref, "heRef": he_ref(he, i, j), "url": url_for(ref),
                     "marker": name, "n": n, "excerpt": excerpt(t, m), "text": t,
                     "edition": "primary",
+                    "en": clean(e_amud[j - 1])[:1500] if j - 1 < len(e_amud) and isinstance(e_amud[j - 1], str) else "",
                 })
             if not hits and NEAR_RE.search(t):
                 review.append({"ref": ref, "url": url_for(ref), "edition": PRIMARY, "text": t})
@@ -220,8 +223,8 @@ def main():
     books, review, failed = [], [], []
     for t, h, g in jobs:
         try:
-            p, s = get_book(t)
-            b, r = scan_book(t, h, g, p, s)
+            p, s, en = get_book(t)
+            b, r = scan_book(t, h, g, p, s, en)
             books.append(b); review += r
         except Exception as e:
             print(f"FAILED {t}: {e}", flush=True)
